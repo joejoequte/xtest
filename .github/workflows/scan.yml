@@ -36,10 +36,11 @@ jobs:
           ./xscan spider --url ${{ github.event.inputs.domain }}
 
       # 步骤 5: 将生成的文件提交回存储库
-      - name: 提交扫描结果到 GitHub 存储库
+      - name: Commit results to Github  # 将结果提交到 Github
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "2991885177@qq.com"
+          git config --global user.name "joejoequte"
+          git commit -m "Output" -a --allow-empty
           cd ./test_files
           git add .
           git commit -m "上传扫描结果"
