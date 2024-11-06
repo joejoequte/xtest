@@ -1,4 +1,4 @@
-name: 开始扫描
+name: 下载、扫描并上传
 
 on:
   workflow_dispatch:  # 允许手动触发
@@ -26,12 +26,14 @@ jobs:
       - name: 解压下载的文件
         run: |
           unzip test.zip -d ./test_files
+          rm test.zip  # 解压后删除 test.zip 文件
 
-      # 步骤 4: 使用提供的域名运行 xscan spider
-      - name: 运行 xscan spider
+      # 步骤 4: 进入解压目录并运行 xscan
+      - name: 进入解压目录并运行 xscan
         run: |
-          sudo apt-get update
-          xscan spider --url ${{ github.event.inputs.domain }}
+          cd ./test_files
+          chmod +x xscan  # 给 xscan 添加可执行权限
+          ./xscan spider --url ${{ github.event.inputs.domain }}
 
       # 步骤 5: 上传扫描结果到 GitHub
       - name: 上传扫描结果
@@ -39,3 +41,4 @@ jobs:
         with:
           name: 扫描结果
           path: ./scan-results/  # 假设你的扫描结果保存在此文件夹中
+
