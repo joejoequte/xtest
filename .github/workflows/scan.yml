@@ -40,5 +40,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: 扫描结果
-          path: ./scan-results/  # 假设你的扫描结果保存在此文件夹中
+          path: ./test_files/  # 假设你的扫描结果保存在此文件夹中
 
