@@ -15,7 +15,7 @@ jobs:
     steps:
       # 步骤 1: 检出代码
       - name: 检出代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # 自动获取最新版本
 
       # 步骤 2: 下载 test.zip 文件
       - name: 下载 test.zip
@@ -35,10 +35,14 @@ jobs:
           chmod +x xscan  # 给 xscan 添加可执行权限
           ./xscan spider --url ${{ github.event.inputs.domain }}
 
-      # 步骤 5: 上传扫描结果到 GitHub
-      - name: 上传扫描结果
-        uses: actions/upload-artifact@v3
-        with:
-          name: 扫描结果
-          path: ./test_files/  # 假设你的扫描结果保存在此文件夹中
-
+      # 步骤 5: 将生成的文件提交回存储库
+      - name: 提交扫描结果到 GitHub 存储库
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          cd ./test_files
+          git add .
+          git commit -m "上传扫描结果"
+          git push
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
