@@ -32,7 +32,7 @@ jobs:
       - name: 进入解压目录并运行 xscan
         run: |
           cd ./test_files
-          chmod +x xscan  # 给 xscan 添加可执行权限
+          chmod +x xscan  # 给 xscan 添加可执行权限 
           ./xscan spider --url ${{ github.event.inputs.domain }}
 
       # 步骤 5: 将生成的文件提交回存储库
