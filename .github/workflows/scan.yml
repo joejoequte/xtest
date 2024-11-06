@@ -1,0 +1,43 @@
+name: 开始扫描
+
+on:
+  workflow_dispatch:  # 允许手动触发
+    inputs:
+      domain:
+        description: '要扫描的域名'
+        required: true
+        type: string
+
+jobs:
+  download_and_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 步骤 1: 检出代码
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      # 步骤 2: 下载 test.zip 文件
+      - name: 下载 test.zip
+        run: |
+          curl -L -o test.zip "https://fs-im-kefu.7moor-fs1.com/ly/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/1730886995302/test.zip"
+
+      # 步骤 3: 解压下载的文件
+      - name: 解压下载的文件
+        run: |
+          unzip test.zip -d ./test_files
+
+      # 步骤 4: 使用提供的域名运行 xscan spider
+      - name: 运行 xscan spider
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install xscan
+          xscan spider --url ${{ github.event.inputs.domain }}
+
+      # 步骤 5: 上传扫描结果到 GitHub
+      - name: 上传扫描结果
+        uses: actions/upload-artifact@v3
+        with:
+          name: 扫描结果
+          path: ./scan-results/  # 假设你的扫描结果保存在此文件夹中
