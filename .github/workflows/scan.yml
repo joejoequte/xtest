@@ -25,7 +25,7 @@ jobs:
       # 步骤 3: 解压下载的文件
       - name: 解压下载的文件
         run: |
-          unzip -q test.zip -d ./test_files
+          unzip -o -q test.zip -d ./test_files  # -o 强制覆盖已存在的文件
           rm test.zip  # 解压后删除 test.zip 文件
 
       # 步骤 4: 进入解压目录并运行 xscan
