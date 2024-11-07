@@ -1,0 +1,8 @@
+https://insurance.grab-sure.com/pax/indonesia/.env
+https://insurance.grab-sure.com/pax/id
+https://insurance.grab-sure.com/favicon.ico
+https://insurance.grab-sure.com/pax/indonesia/runtime.33e69c2e67305d4bc9ec.js
+https://insurance.grab-sure.com/pax/indonesia/4127.d64878d9ffed90239e72.js
+https://insurance.grab-sure.com/pax/indonesia/index.815c63fb60d89285b1ee.js
+https://insurance.grab-sure.com/pax/medusa/gateway/query/icms
+https://insurance.grab-sure.com/pax/medusa/gateway/query/%7B&%7D
