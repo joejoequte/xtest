@@ -1,7 +1,7 @@
 name: 下载、扫描并上传
 
 on:
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
     inputs:
       domain:
         description: '要扫描的域名'
@@ -15,7 +15,7 @@ jobs:
     steps:
       # 步骤 1: 检出代码
       - name: 检出代码
-        uses: actions/checkout@v3  # 自动获取最新版本
+        uses: actions/checkout@v3
 
       # 步骤 2: 下载 test.zip 文件
       - name: 下载 test.zip
@@ -25,25 +25,34 @@ jobs:
       # 步骤 3: 解压下载的文件
       - name: 解压下载的文件
         run: |
-          unzip test.zip -d ./test_files
+          unzip -q test.zip -d ./test_files
           rm test.zip  # 解压后删除 test.zip 文件
 
       # 步骤 4: 进入解压目录并运行 xscan
       - name: 进入解压目录并运行 xscan
         run: |
           cd ./test_files
-          chmod +x xscan  # 给 xscan 添加可执行权限 
+          chmod +x xscan
           ./xscan spider --url ${{ github.event.inputs.domain }}
 
-      # 步骤 5: 将生成的文件提交回存储库
-      - name: Commit results to Github  # 将结果提交到 Github
+      # 步骤 5: 重命名文件夹为当前时间并保存路径变量
+      - name: 重命名文件夹为当前时间
+        run: |
+          current_time=$(date +"%Y%m%d_%H%M%S")
+          mv ./test_files ./test_files_$current_time
+          echo "folder_name=test_files_$current_time" >> $GITHUB_ENV
+
+      # 步骤 6: 删除不需要的文件
+      - name: 删除 config.yaml, dict, readme.md, xscan
+        run: |
+          rm -f ./${{ env.folder_name }}/config.yaml ./${{ env.folder_name }}/dict ./${{ env.folder_name }}/readme.md ./${{ env.folder_name }}/xscan
+
+      # 步骤 7: 将生成的文件提交回存储库
+      - name: Commit results to Github
         run: |
           git config --local user.email "2991885177@qq.com"
           git config --global user.name "joejoequte"
-          git commit -m "Output" -a --allow-empty
-          cd ./test_files
+          cd ./${{ env.folder_name }}
           git add .
           git commit -m "上传扫描结果"
-          git push
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/joejoequte/xtest.git
