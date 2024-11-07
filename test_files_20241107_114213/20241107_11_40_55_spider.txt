@@ -1,0 +1,1 @@
+https://www.clearxchange.com/payments/resources-3.2.7/js/jquery.double.submit.js
